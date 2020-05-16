@@ -8,10 +8,13 @@
 
 package com.coffeeshop.Repository;
 
-import com.coffeeshop.EntityClasses.QueueEntity;
+import com.coffeeshop.EntityClasses.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QueueRepository extends JpaRepository <QueueEntity,Long> {
+public interface CustomerRepository extends JpaRepository<CustomerEntity,Long> {
+
+    public CustomerEntity findByUsername(String username);
+
 }

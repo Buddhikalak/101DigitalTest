@@ -6,12 +6,12 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.coffeeshop.Repository;
+package com.coffeeshop.Services;
 
-import com.coffeeshop.EntityClasses.QueueEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.ShopEntity;
 
-@Repository
-public interface QueueRepository extends JpaRepository <QueueEntity,Long> {
+public interface CustomerService {
+    public CustomerEntity create(CustomerEntity customerEntity);
+    public CustomerEntity login(CustomerEntity customerEntity);
 }
