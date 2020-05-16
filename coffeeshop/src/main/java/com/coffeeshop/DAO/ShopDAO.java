@@ -3,6 +3,7 @@ package com.coffeeshop.DAO;
 import com.coffeeshop.EntityClasses.MenuEntity;
 import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
+import com.coffeeshop.EntityClasses.UserEntity;
 
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface ShopDAO {
     public QueueEntity UpdateQueue(QueueEntity queueEntity);
 
     public QueueEntity DeleteQueue(QueueEntity queueEntity);
+
+    public UserEntity CreateUser(UserEntity userEntity);
 }

@@ -12,6 +12,7 @@ import lombok.Data;
 
 @Data
 public class CreateQueue {
+    private long id;
     private long shopid;
     private int max;
 

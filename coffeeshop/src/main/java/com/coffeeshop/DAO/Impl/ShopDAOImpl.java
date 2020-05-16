@@ -4,9 +4,11 @@ import com.coffeeshop.DAO.ShopDAO;
 import com.coffeeshop.EntityClasses.MenuEntity;
 import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
+import com.coffeeshop.EntityClasses.UserEntity;
 import com.coffeeshop.Repository.MenuRepository;
 import com.coffeeshop.Repository.QueueRepository;
 import com.coffeeshop.Repository.ShopRepository;
+import com.coffeeshop.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class ShopDAOImpl implements ShopDAO {
 
     @Autowired
     QueueRepository queueRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public ShopEntity create(ShopEntity shopEntity) {
@@ -113,5 +118,10 @@ public class ShopDAOImpl implements ShopDAO {
     public QueueEntity DeleteQueue(QueueEntity queueEntity) {
         queueRepository.deleteById(queueEntity.getId());
         return queueEntity;
+    }
+
+    @Override
+    public UserEntity CreateUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
 }

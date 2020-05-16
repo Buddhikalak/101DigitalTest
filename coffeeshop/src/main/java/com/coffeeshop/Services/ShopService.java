@@ -3,6 +3,7 @@ package com.coffeeshop.Services;
 import com.coffeeshop.EntityClasses.MenuEntity;
 import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
+import com.coffeeshop.EntityClasses.UserEntity;
 
 import java.util.Optional;
 
@@ -24,6 +25,8 @@ public interface ShopService {
     public QueueEntity UpdateQueue(QueueEntity queueEntity);
 
     public QueueEntity DeleteQueue(QueueEntity queueEntity);
+
+    public UserEntity CreateUser(UserEntity userEntity);
 
 
 }
