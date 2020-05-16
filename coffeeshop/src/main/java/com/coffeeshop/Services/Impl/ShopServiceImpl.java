@@ -2,6 +2,7 @@ package com.coffeeshop.Services.Impl;
 
 import com.coffeeshop.DAO.ShopDAO;
 import com.coffeeshop.EntityClasses.MenuEntity;
+import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.Services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,20 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public MenuEntity updateMenu(MenuEntity menuEntity) {
         return shopDAO.updateMenu(menuEntity);
+    }
+
+    @Override
+    public QueueEntity CreateQueue(QueueEntity queueEntity) {
+        return shopDAO.CreateQueue(queueEntity);
+    }
+
+    @Override
+    public QueueEntity UpdateQueue(QueueEntity queueEntity) {
+        return shopDAO.UpdateQueue(queueEntity);
+    }
+
+    @Override
+    public QueueEntity DeleteQueue(QueueEntity queueEntity) {
+        return shopDAO.DeleteQueue(queueEntity);
     }
 }

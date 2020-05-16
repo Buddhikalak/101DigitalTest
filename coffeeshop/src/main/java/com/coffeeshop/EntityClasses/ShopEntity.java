@@ -37,4 +37,5 @@ public class ShopEntity implements Serializable {
     @Column(name="closetime")
     private String closetime;
 
+
 }
