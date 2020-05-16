@@ -1,40 +1,33 @@
 package com.coffeeshop.Controller;
 
-import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.Model.BaseRestResponse;
-import com.coffeeshop.Services.ShopService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/shopper")
-public class ShopController {
-    @Autowired
-    ShopService shopService;
-
-    @PostMapping(value = "/create")
+public class IndexController {
+    @GetMapping(value = "/")
     public @ResponseBody
-    ResponseEntity<String> createShop(@RequestBody ShopEntity shopEntity){
+    ResponseEntity<String> Test(){
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
         ObjectMapper mapper = new ObjectMapper();
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
-        try {
-            final ShopEntity entity = shopService.create(shopEntity);
+        try{
             baseResponse.setError(false);
-            baseResponse.setData(entity);
-            baseResponse.setMessage("Created Shop Successfully");
+            baseResponse.setData(null);
+            baseResponse.setMessage("1.0.0");
             baseResponse.setCode(201);
             responseJson = mapper.writeValueAsString(baseResponse);
             return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
-
         }catch (Exception ex){
             baseResponse.setError(true);
             baseResponse.setData(null);
@@ -47,8 +40,6 @@ public class ShopController {
             }
             return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
-
-
-
 }
