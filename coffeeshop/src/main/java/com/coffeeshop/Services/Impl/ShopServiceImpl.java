@@ -1,10 +1,13 @@
 package com.coffeeshop.Services.Impl;
 
 import com.coffeeshop.DAO.ShopDAO;
+import com.coffeeshop.EntityClasses.MenuEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.Services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -28,7 +31,17 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopEntity getShop(long shopId) {
+    public Optional<ShopEntity> getShop(long shopId) {
         return shopDAO.getShop(shopId);
+    }
+
+    @Override
+    public MenuEntity createMenu(MenuEntity menuEntity) {
+        return shopDAO.createMenu(menuEntity);
+    }
+
+    @Override
+    public MenuEntity updateMenu(MenuEntity menuEntity) {
+        return shopDAO.updateMenu(menuEntity);
     }
 }

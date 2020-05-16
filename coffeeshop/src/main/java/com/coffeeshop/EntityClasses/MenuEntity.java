@@ -27,6 +27,6 @@ public class MenuEntity implements Serializable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "shopid")
     private ShopEntity Shop;
 }
