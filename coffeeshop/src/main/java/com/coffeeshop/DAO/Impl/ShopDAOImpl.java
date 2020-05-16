@@ -15,21 +15,24 @@ public class ShopDAOImpl implements ShopDAO {
 
     @Override
     public ShopEntity create(ShopEntity shopEntity) {
+
         return shopRepository.save(shopEntity);
     }
 
     @Override
     public ShopEntity Update(ShopEntity shopEntity) {
-        return null;
+        return shopRepository.save(shopEntity);
     }
 
     @Override
     public ShopEntity Delete(ShopEntity shopEntity) {
-        return null;
+        shopRepository.delete(shopEntity);
+        return shopEntity;
     }
 
     @Override
-    public ShopEntity getShop(int shopId) {
-        return null;
+    public ShopEntity getShop(long shopId) {
+
+        return shopRepository.getOne(shopId);
     }
 }

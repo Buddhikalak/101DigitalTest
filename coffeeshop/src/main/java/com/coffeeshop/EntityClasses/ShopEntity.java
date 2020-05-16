@@ -16,18 +16,6 @@ public class ShopEntity implements Serializable {
     public ShopEntity() {
     }
 
-    @Override
-    public String toString() {
-        return "ShopEntity{" +
-                "id=" + id +
-                ", name='" + shopName + '\'' +
-                ", address='" + shopAddress + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                '}';
-    }
-
     @Column(name="shopName")
     private String shopName;
 
@@ -42,5 +30,11 @@ public class ShopEntity implements Serializable {
 
     @Column(name="longitude")
     private String longitude;
+
+    @Column(name="opentime")
+    private String opentime;
+
+    @Column(name="closetime")
+    private String closetime;
 
 }

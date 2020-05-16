@@ -7,6 +7,6 @@ public interface ShopService {
     public ShopEntity create(ShopEntity shopEntity);
     public ShopEntity Update(ShopEntity shopEntity);
     public ShopEntity Delete(ShopEntity shopEntity);
-    public ShopEntity getShop(int shopId);
+    public ShopEntity getShop(long shopId);
 
 }

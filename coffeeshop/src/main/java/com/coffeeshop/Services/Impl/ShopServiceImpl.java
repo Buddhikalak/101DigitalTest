@@ -28,7 +28,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopEntity getShop(int shopId) {
+    public ShopEntity getShop(long shopId) {
         return shopDAO.getShop(shopId);
     }
 }
