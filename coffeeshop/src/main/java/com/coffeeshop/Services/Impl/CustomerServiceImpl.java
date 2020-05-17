@@ -60,12 +60,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<OrderEntity> getQueueOrders(int queueid, long shopid) {
+    public List<OrderEntity> getQueueOrders(long queueid, long shopid) {
         return customerDAO.getQueueOrders(queueid, shopid);
     }
 
     @Override
-    public int waitingCount(int queueid, long shopid) {
+    public int waitingCount(long queueid, long shopid) {
         return customerDAO.waitingCount(queueid, shopid);
     }
 }

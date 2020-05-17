@@ -28,7 +28,7 @@ public interface CustomerDAO {
 
     public OrderEntity getOrderDetails(long orderid);
 
-    public List<OrderEntity> getQueueOrders(int queueid, long shopid);
+    public List<OrderEntity> getQueueOrders(long queueid, long shopid);
 
-    public int waitingCount(int queueid, long shopid);
+    public int waitingCount(long queueid, long shopid);
 }

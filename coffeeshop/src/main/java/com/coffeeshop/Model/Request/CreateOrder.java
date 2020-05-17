@@ -6,42 +6,36 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.coffeeshop.EntityClasses;
+package com.coffeeshop.Model.Request;
 
-import com.coffeeshop.Enum.OrderStatusEnum;
+import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.MenuEntity;
+import com.coffeeshop.EntityClasses.ShopEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Data
 @Entity
 @ApiModel(description = "Create Order Details")
-public class OrderEntity implements Serializable {
-
+public class CreateOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(notes = "Database Generated Id/PrimaryKey")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "shopid")
     @ApiModelProperty(notes = "Shop Id")
-    private ShopEntity Shop;
+    private long Shopid;
 
-    @ManyToOne
-    @JoinColumn(name = "menuid")
     @ApiModelProperty(notes = "Menu Id")
-    private MenuEntity menuEntity;
+    private long menuid;
 
-    @ManyToOne
-    @JoinColumn(name = "userid")
     @ApiModelProperty(notes = "User Id")
-    private CustomerEntity customerEntity;
+    private long userid;
 
     @ApiModelProperty(notes = "Latitude")
     private String latitude;
@@ -49,16 +43,12 @@ public class OrderEntity implements Serializable {
     @ApiModelProperty(notes = "Longitude")
     private String Longitude;
 
-
-    @ManyToOne
-    @JoinColumn(name = "queue")
     @ApiModelProperty(notes = "Queue Number-Automatically Selected")
-    private QueueEntity queue;
+    private int queue;
 
     @ApiModelProperty(notes = "Automatically Update the Date")
     private Timestamp date;
 
     @ApiModelProperty(notes = "Automatically Update the Status")
     private String orderStatusEnum;
-
 }
