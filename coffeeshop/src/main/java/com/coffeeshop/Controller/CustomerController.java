@@ -148,12 +148,22 @@ public class CustomerController {
             final Optional<ShopEntity> shop = shopService.getShop(createOrder.getShopid());
             final Optional<MenuEntity> menu = menuRepository.findById(createOrder.getMenuid());
 
-            List<QueueEntity> queueList = new ArrayList<>();//queueRepository.findByShop(shop.get());
+            List<QueueEntity> queueList = queueRepository.findAll();
+            for (QueueEntity queueEntity:queueList) {
+                if( queueEntity.getShop().getId()!=shop.get().getId()){
+                    queueList.remove(queueEntity);
+                }
+            }
+            int queuenumber=0;
             int queue = queueList.size();
             if (queue == 0 || queue < 1) {
                 queue = 1;
+            }else if(queue==1){
+                queuenumber=0;
+            }else{
+                queuenumber = getRandomNumberInRange(1, queue);
             }
-            int queuenumber = getRandomNumberInRange(1, queue);
+
             QueueEntity queueEntity = queueList.get(queuenumber);
 
             OrderEntity orderEntity = new OrderEntity();
@@ -323,10 +333,10 @@ public class CustomerController {
 
 
 
-    @GetMapping(value = "/order/queue/{orderid}/{queueid}")
+    @GetMapping(value = "/order/queue/{queueid}/{shopid}")
     public @ResponseBody
-    ResponseEntity<String> getQueueOrders(@PathVariable("orderid") long orderid,
-                                          @PathVariable("queueid") long queueid) {
+    ResponseEntity<String> getQueueOrders(@PathVariable("queueid") long queueid,
+                                          @PathVariable("shopid") long shopid) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -334,7 +344,7 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
-            List<OrderEntity> queueOrders = customerService.getQueueOrders(queueid, orderid);
+            List<OrderEntity> queueOrders = customerService.getQueueOrders(queueid, shopid);
             baseResponse.setError(false);
             baseResponse.setData(queueOrders);
             baseResponse.setMessage("Order Details");
@@ -390,7 +400,7 @@ public class CustomerController {
     }
 
     private static int getRandomNumberInRange(int min, int max) {
-        if (min >= max) {
+        if (min > max) {
             throw new IllegalArgumentException("max must be greater than min");
         }
         Random r = new Random();

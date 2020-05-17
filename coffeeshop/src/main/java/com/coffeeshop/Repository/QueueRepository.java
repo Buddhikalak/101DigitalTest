@@ -17,5 +17,5 @@ import java.util.List;
 
 @Repository
 public interface QueueRepository extends JpaRepository <QueueEntity,Long> {
- //   List<QueueEntity> findByShop(ShopEntity shopEntity);
+
 }

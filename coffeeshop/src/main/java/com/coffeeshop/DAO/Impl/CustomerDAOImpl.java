@@ -98,7 +98,12 @@ public class CustomerDAOImpl implements CustomerDAO {
         if (byId.get() != null) {
             Optional<ShopEntity> shop = shopRepository.findById(byId.get().getShopEntity().getId());
             if (shop.get() != null) {
-                List<QueueEntity> queueList = new ArrayList<>();//eueRepository.findByShop(shop.get());
+                List<QueueEntity> queueList = queueRepository.findAll();
+                for (QueueEntity queueEntity : queueList) {
+                    if (queueEntity.getShop().getId() != shop.get().getId()) {
+                        queueList.remove(queueEntity);
+                    }
+                }
                 int queue = queueList.size();
                 byId.get().setQueueEntity(queueRepository.findById((long) queueid).get());
                 return orderRepository.save(byId.get());
@@ -127,7 +132,20 @@ public class CustomerDAOImpl implements CustomerDAO {
         final Optional<QueueEntity> queue = queueRepository.findById(queueid);
         final Optional<ShopEntity> shop = shopRepository.findById(shopid);
         if (queue.get() != null && shop.get() != null) {
-            return null;//return orderRepository.findByShopAndQueue(shop.get(), queue.get());
+            List<OrderEntity> orderRepositoryAll2 = new ArrayList<>();
+            final List<OrderEntity> orderRepositoryAll = orderRepository.findAll();
+            for (OrderEntity entity : orderRepositoryAll) {
+                if (entity.getShopEntity().getId() == shop.get().getId()) {
+                    if (entity.getQueueEntity().getId() == queue.get().getId()) {
+                        orderRepositoryAll2.add(entity);
+                    } else {
+                       // orderRepositoryAll.remove(entity);
+                    }
+                } else {
+                    //orderRepositoryAll.remove(entity);
+                }
+            }
+            return orderRepositoryAll2;
         }
         return null;
     }
@@ -137,7 +155,25 @@ public class CustomerDAOImpl implements CustomerDAO {
         final Optional<QueueEntity> queue = queueRepository.findById(queueid);
         final Optional<ShopEntity> shop = shopRepository.findById(shopid);
         if (queue.get() != null && shop.get() != null) {
-            return 0;// return orderRepository.findByShopAndQueueAndOrderStatusEnum(shop.get(), queue.get(), OrderStatusEnum.PENDING.getValue()).size();
+            final List<OrderEntity> orderRepositoryAll2 =new ArrayList<>();
+            final List<OrderEntity> orderRepositoryAll = orderRepository.findAll();
+            for (OrderEntity entity : orderRepositoryAll) {
+                if (entity.getShopEntity().getId() == shop.get().getId()) {
+                    if (entity.getQueueEntity().getId() == queue.get().getId()) {
+                        if (entity.getOrderStatusEnum().equals(OrderStatusEnum.PENDING.getValue())) {
+                            orderRepositoryAll2.add(entity);
+                        } else {
+                            //orderRepositoryAll.remove(entity);
+                        }
+                    } else {
+                        //orderRepositoryAll.remove(entity);
+                    }
+
+                } else {
+                   // orderRepositoryAll.remove(entity);
+                }
+            }
+            return orderRepositoryAll2.size();// return orderRepository.findByShopAndQueueAndOrderStatusEnum(shop.get(), queue.get(), OrderStatusEnum.PENDING.getValue()).size();
         }
         return 0;
     }
