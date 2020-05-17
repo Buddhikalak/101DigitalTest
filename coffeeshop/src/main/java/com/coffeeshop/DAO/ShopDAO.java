@@ -5,6 +5,7 @@ import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.EntityClasses.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ShopDAO {
@@ -27,4 +28,6 @@ public interface ShopDAO {
     public QueueEntity DeleteQueue(QueueEntity queueEntity);
 
     public UserEntity CreateUser(UserEntity userEntity);
+
+    public List<MenuEntity> getMenuesByShop(long shopid);
 }

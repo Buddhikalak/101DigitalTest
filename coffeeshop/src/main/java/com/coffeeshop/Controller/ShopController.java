@@ -1,5 +1,6 @@
 package com.coffeeshop.Controller;
 
+import com.coffeeshop.EntityClasses.MenuEntity;
 import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.EntityClasses.UserEntity;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -228,6 +230,53 @@ public class ShopController {
                 baseResponse.setMessage("No Shops");
             } else {
                 baseResponse.setData(entity.get());
+                baseResponse.setMessage("Shop Details");
+            }
+
+            baseResponse.setCode(201);
+            responseJson = mapper.writeValueAsString(baseResponse);
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            baseResponse.setError(false);
+            baseResponse.setData(null);
+            baseResponse.setMessage("No Shops");
+            baseResponse.setCode(201);
+            try {
+                responseJson = mapper.writeValueAsString(baseResponse);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
+        }
+    }
+    @GetMapping(value = "/get/{id}/menu")
+    public @ResponseBody
+    ResponseEntity<String> getMenusbyShopid(@PathVariable("id") long id,
+                                      @RequestHeader("Authorization") String Authorization) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+        ObjectMapper mapper = new ObjectMapper();
+        BaseRestResponse baseResponse = new BaseRestResponse();
+        String responseJson = "";
+        try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
+            final List<MenuEntity> list = shopService.getMenuesByShop(id);
+            baseResponse.setError(false);
+            if (list == null) {
+                baseResponse.setData(null);
+                baseResponse.setMessage("No menus");
+            } else {
+                baseResponse.setData(list);
                 baseResponse.setMessage("Shop Details");
             }
 

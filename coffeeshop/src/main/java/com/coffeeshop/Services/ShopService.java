@@ -5,6 +5,7 @@ import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.EntityClasses.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ShopService {
@@ -17,6 +18,8 @@ public interface ShopService {
     public Optional<ShopEntity> getShop(long shopId);
 
     public MenuEntity createMenu(MenuEntity menuEntity);
+
+    public List<MenuEntity> getMenuesByShop(long shopid);
 
     public MenuEntity updateMenu(MenuEntity menuEntity);
 

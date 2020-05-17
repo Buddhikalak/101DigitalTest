@@ -12,6 +12,8 @@ import com.coffeeshop.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -123,5 +125,22 @@ public class ShopDAOImpl implements ShopDAO {
     @Override
     public UserEntity CreateUser(UserEntity userEntity) {
         return userRepository.save(userEntity);
+    }
+
+    @Override
+    public List<MenuEntity> getMenuesByShop(long shopid) {
+        final Optional<ShopEntity> byId = shopRepository.findById(shopid);
+        if (byId.get() != null) {
+            List<MenuEntity> all2 = new ArrayList<>();
+            final List<MenuEntity> all = menuRepository.findAll();
+            for (MenuEntity menuEntity : all) {
+                if (menuEntity.getShop().getId() == byId.get().getId()) {
+                    all2.add(menuEntity);
+                }
+            }
+            return all2;
+        } else {
+            return null;
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.coffeeshop.Services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,11 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public MenuEntity createMenu(MenuEntity menuEntity) {
         return shopDAO.createMenu(menuEntity);
+    }
+
+    @Override
+    public List<MenuEntity> getMenuesByShop(long shopid) {
+        return shopDAO.getMenuesByShop(shopid);
     }
 
     @Override
