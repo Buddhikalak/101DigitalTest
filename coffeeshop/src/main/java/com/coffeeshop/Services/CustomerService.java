@@ -9,9 +9,27 @@
 package com.coffeeshop.Services;
 
 import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.OrderEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
+
+import java.util.List;
 
 public interface CustomerService {
     public CustomerEntity create(CustomerEntity customerEntity);
+
     public CustomerEntity login(CustomerEntity customerEntity);
+
+    public OrderEntity createOrder(OrderEntity orderEntity);
+
+    public OrderEntity updateOrderStatus(long orderid, String status);
+
+    public OrderEntity changeQueue(long orderid, int queueid);
+
+    public OrderEntity cancelOrder(long orderid);
+
+    public OrderEntity getOrderDetails(long orderid);
+
+    public List<OrderEntity> getQueueOrders(int queueid, long shopid);
+
+    public int waitingCount(int queueid, long shopid);
 }

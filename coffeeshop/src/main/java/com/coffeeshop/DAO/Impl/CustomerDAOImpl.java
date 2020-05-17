@@ -10,6 +10,7 @@ package com.coffeeshop.DAO.Impl;
 
 import com.coffeeshop.DAO.CustomerDAO;
 import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.OrderEntity;
 import com.coffeeshop.Repository.CustomerRepository;
 import com.coffeeshop.Utils.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class CustomerDAOImpl implements CustomerDAO {
@@ -39,5 +41,40 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
 
         return customerRepository.save(byUsername);
+    }
+
+    @Override
+    public OrderEntity createOrder(OrderEntity orderEntity) {
+        return null;
+    }
+
+    @Override
+    public OrderEntity updateOrderStatus(long orderid, String status) {
+        return null;
+    }
+
+    @Override
+    public OrderEntity changeQueue(long orderid, int queueid) {
+        return null;
+    }
+
+    @Override
+    public OrderEntity cancelOrder(long orderid) {
+        return null;
+    }
+
+    @Override
+    public OrderEntity getOrderDetails(long orderid) {
+        return null;
+    }
+
+    @Override
+    public List<OrderEntity> getQueueOrders(int queueid, long shopid) {
+        return null;
+    }
+
+    @Override
+    public int waitingCount(int queueid, long shopid) {
+        return 0;
     }
 }

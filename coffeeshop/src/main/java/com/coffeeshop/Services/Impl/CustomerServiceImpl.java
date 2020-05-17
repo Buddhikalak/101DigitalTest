@@ -10,9 +10,12 @@ package com.coffeeshop.Services.Impl;
 
 import com.coffeeshop.DAO.CustomerDAO;
 import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.OrderEntity;
 import com.coffeeshop.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -29,5 +32,40 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerEntity login(CustomerEntity customerEntity) {
         return customerDAO.login(customerEntity);
+    }
+
+    @Override
+    public OrderEntity createOrder(OrderEntity orderEntity) {
+        return customerDAO.createOrder(orderEntity);
+    }
+
+    @Override
+    public OrderEntity updateOrderStatus(long orderid, String status) {
+        return customerDAO.updateOrderStatus(orderid, status);
+    }
+
+    @Override
+    public OrderEntity changeQueue(long orderid, int queueid) {
+        return customerDAO.changeQueue(orderid, queueid);
+    }
+
+    @Override
+    public OrderEntity cancelOrder(long orderid) {
+        return customerDAO.cancelOrder(orderid);
+    }
+
+    @Override
+    public OrderEntity getOrderDetails(long orderid) {
+        return customerDAO.getOrderDetails(orderid);
+    }
+
+    @Override
+    public List<OrderEntity> getQueueOrders(int queueid, long shopid) {
+        return customerDAO.getQueueOrders(queueid, shopid);
+    }
+
+    @Override
+    public int waitingCount(int queueid, long shopid) {
+        return customerDAO.waitingCount(queueid, shopid);
     }
 }
