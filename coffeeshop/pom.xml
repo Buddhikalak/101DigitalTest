@@ -8,13 +8,17 @@
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.coffeeshop</groupId>
     <artifactId>coffeeshop</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+
     <name>coffeeshop</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
 
@@ -60,12 +64,20 @@
             <version>2.8.0</version>
         </dependency>
     </dependencies>
-
     <build>
+        <finalName>coffeeshop</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.0.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
