@@ -17,7 +17,7 @@ public class QueueEntity  implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "shopid")
+    @JoinColumn(name = "shop")
     @ApiModelProperty(notes = "Shop Id")
     private ShopEntity Shop;
 

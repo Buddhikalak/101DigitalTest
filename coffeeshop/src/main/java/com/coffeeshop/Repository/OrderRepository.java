@@ -12,11 +12,14 @@ import com.coffeeshop.EntityClasses.OrderEntity;
 import com.coffeeshop.EntityClasses.QueueEntity;
 import com.coffeeshop.EntityClasses.ShopEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
-    public List<OrderEntity> findByShopAndQueue(ShopEntity shop, QueueEntity queue);
-    public List<OrderEntity> findByShopAndQueueAndOrderStatusEnum(ShopEntity shop, QueueEntity queue,String Status);
+   // public List<OrderEntity> findByShopAndQueue(ShopEntity shopEntity, QueueEntity QueueEntity);
+    //public List<OrderEntity> findByShopAndQueueAndOrderStatusEnum(ShopEntity shopEntity, QueueEntity queue,String Status);
 
 }

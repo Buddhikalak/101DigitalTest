@@ -31,7 +31,7 @@ public class OrderEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "shopid")
     @ApiModelProperty(notes = "Shop Id")
-    private ShopEntity Shop;
+    private ShopEntity shopEntity;
 
     @ManyToOne
     @JoinColumn(name = "menuid")
@@ -43,17 +43,17 @@ public class OrderEntity implements Serializable {
     @ApiModelProperty(notes = "User Id")
     private CustomerEntity customerEntity;
 
+    @ManyToOne
+    @JoinColumn(name = "queueid")
+    @ApiModelProperty(notes = "Queue Number-Automatically Selected")
+    private QueueEntity queueEntity;
+
     @ApiModelProperty(notes = "Latitude")
     private String latitude;
 
     @ApiModelProperty(notes = "Longitude")
     private String Longitude;
 
-
-    @ManyToOne
-    @JoinColumn(name = "queue")
-    @ApiModelProperty(notes = "Queue Number-Automatically Selected")
-    private QueueEntity queue;
 
     @ApiModelProperty(notes = "Automatically Update the Date")
     private Timestamp date;

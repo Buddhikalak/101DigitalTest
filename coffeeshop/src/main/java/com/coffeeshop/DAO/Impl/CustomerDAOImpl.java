@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,11 +96,11 @@ public class CustomerDAOImpl implements CustomerDAO {
     public OrderEntity changeQueue(long orderid, int queueid) {
         Optional<OrderEntity> byId = orderRepository.findById(orderid);
         if (byId.get() != null) {
-            Optional<ShopEntity> shop = shopRepository.findById(byId.get().getShop().getId());
+            Optional<ShopEntity> shop = shopRepository.findById(byId.get().getShopEntity().getId());
             if (shop.get() != null) {
-                List<QueueEntity> queueList = queueRepository.findByShop(shop.get());
+                List<QueueEntity> queueList = new ArrayList<>();//eueRepository.findByShop(shop.get());
                 int queue = queueList.size();
-                byId.get().setQueue(queueRepository.findById((long) queueid).get());
+                byId.get().setQueueEntity(queueRepository.findById((long) queueid).get());
                 return orderRepository.save(byId.get());
             }
         }
@@ -126,7 +127,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         final Optional<QueueEntity> queue = queueRepository.findById(queueid);
         final Optional<ShopEntity> shop = shopRepository.findById(shopid);
         if (queue.get() != null && shop.get() != null) {
-            return orderRepository.findByShopAndQueue(shop.get(), queue.get());
+            return null;//return orderRepository.findByShopAndQueue(shop.get(), queue.get());
         }
         return null;
     }
@@ -136,7 +137,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         final Optional<QueueEntity> queue = queueRepository.findById(queueid);
         final Optional<ShopEntity> shop = shopRepository.findById(shopid);
         if (queue.get() != null && shop.get() != null) {
-            return orderRepository.findByShopAndQueueAndOrderStatusEnum(shop.get(), queue.get(), OrderStatusEnum.PENDING.getValue()).size();
+            return 0;// return orderRepository.findByShopAndQueueAndOrderStatusEnum(shop.get(), queue.get(), OrderStatusEnum.PENDING.getValue()).size();
         }
         return 0;
     }

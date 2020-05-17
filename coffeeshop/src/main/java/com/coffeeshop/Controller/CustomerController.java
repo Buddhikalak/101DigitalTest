@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -147,7 +148,7 @@ public class CustomerController {
             final Optional<ShopEntity> shop = shopService.getShop(createOrder.getShopid());
             final Optional<MenuEntity> menu = menuRepository.findById(createOrder.getMenuid());
 
-            List<QueueEntity> queueList = queueRepository.findByShop(shop.get());
+            List<QueueEntity> queueList = new ArrayList<>();//queueRepository.findByShop(shop.get());
             int queue = queueList.size();
             if (queue == 0 || queue < 1) {
                 queue = 1;
@@ -161,8 +162,8 @@ public class CustomerController {
             orderEntity.setLatitude(createOrder.getLatitude());
             orderEntity.setLongitude(createOrder.getLongitude());
             orderEntity.setMenuEntity(menu.get());
-            orderEntity.setShop(shop.get());
-            orderEntity.setQueue(queueEntity);
+            orderEntity.setShopEntity(shop.get());
+            orderEntity.setQueueEntity(queueEntity);
             final OrderEntity order = customerService.createOrder(orderEntity);
 
             baseResponse.setError(false);
