@@ -8,12 +8,20 @@
 
 package com.coffeeshop.Model.Request;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel(description = "All details about Create QueueRequest Details ")
 public class CreateQueue {
+    @ApiModelProperty(notes = "Database Generated Id/PrimaryKey")
     private long id;
+
+    @ApiModelProperty(notes = "Database Generated Shopid")
     private long shopid;
+
+    @ApiModelProperty(notes = "Max number of queue")
     private int max;
 
 }

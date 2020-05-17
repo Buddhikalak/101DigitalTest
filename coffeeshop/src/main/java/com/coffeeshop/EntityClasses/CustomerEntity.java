@@ -8,6 +8,8 @@
 
 package com.coffeeshop.EntityClasses;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,30 +18,38 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
+@ApiModel(description = "Create Customer Request Details")
 public class CustomerEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty(notes = "Database Generated Id/PrimaryKey")
     private Long id;
 
     @Column(name="name")
+    @ApiModelProperty(notes = "CustomerName")
     private String name;
 
     @Column(name="mobile")
+    @ApiModelProperty(notes = "Mobile Number")
     private String mobile;
 
     @Column(name="password")
+    @ApiModelProperty(notes = "Password")
     private String password;
 
     @Column(name="username")
+    @ApiModelProperty(notes = "UserName")
     private String username;
 
     @Column(name="address")
     private String address;
 
     @Column(name="token")
+    @ApiModelProperty(notes = "Address")
     private String token;
 
     @Column(name="date")
+    @ApiModelProperty(notes = "CusReg Date")
     private Timestamp timestamp;
 
 }

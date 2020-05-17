@@ -8,6 +8,8 @@
 
 package com.coffeeshop.EntityClasses;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,21 +17,26 @@ import java.io.Serializable;
 
 @Data
 @Entity
+@ApiModel(description = "Create MenuEntity Details")
 public class MenuEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty(notes = "Database Generated Id/PrimaryKey")
     private Long id;
 
     public MenuEntity() {
     }
 
     @Column(name="name")
+    @ApiModelProperty(notes = "Menu Name")
     private String name;
 
     @Column(name="price")
+    @ApiModelProperty(notes = "Price")
     private double price;
 
     @ManyToOne
     @JoinColumn(name = "shopid")
+    @ApiModelProperty(notes = "Shop Id")
     private ShopEntity Shop;
 }
