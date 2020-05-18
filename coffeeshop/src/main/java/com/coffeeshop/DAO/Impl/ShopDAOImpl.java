@@ -1,14 +1,8 @@
 package com.coffeeshop.DAO.Impl;
 
 import com.coffeeshop.DAO.ShopDAO;
-import com.coffeeshop.EntityClasses.MenuEntity;
-import com.coffeeshop.EntityClasses.QueueEntity;
-import com.coffeeshop.EntityClasses.ShopEntity;
-import com.coffeeshop.EntityClasses.UserEntity;
-import com.coffeeshop.Repository.MenuRepository;
-import com.coffeeshop.Repository.QueueRepository;
-import com.coffeeshop.Repository.ShopRepository;
-import com.coffeeshop.Repository.UserRepository;
+import com.coffeeshop.EntityClasses.*;
+import com.coffeeshop.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +24,9 @@ public class ShopDAOImpl implements ShopDAO {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     public ShopEntity create(ShopEntity shopEntity) {
@@ -142,5 +139,17 @@ public class ShopDAOImpl implements ShopDAO {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<OrderEntity> getShopOrders(long shopid) {
+        List<OrderEntity> resp = new ArrayList<>();
+        List<OrderEntity> all = orderRepository.findAll();
+        for (OrderEntity orderEntity : all) {
+            if (orderEntity.getShopEntity().getId() == shopid){
+                resp.add(orderEntity);
+            }
+        }
+        return resp;
     }
 }

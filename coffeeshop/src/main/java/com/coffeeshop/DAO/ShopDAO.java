@@ -1,9 +1,6 @@
 package com.coffeeshop.DAO;
 
-import com.coffeeshop.EntityClasses.MenuEntity;
-import com.coffeeshop.EntityClasses.QueueEntity;
-import com.coffeeshop.EntityClasses.ShopEntity;
-import com.coffeeshop.EntityClasses.UserEntity;
+import com.coffeeshop.EntityClasses.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +27,6 @@ public interface ShopDAO {
     public UserEntity CreateUser(UserEntity userEntity);
 
     public List<MenuEntity> getMenuesByShop(long shopid);
+
+    public List<OrderEntity> getShopOrders(long shopid);
 }

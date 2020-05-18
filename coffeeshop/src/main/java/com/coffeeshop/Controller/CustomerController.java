@@ -11,15 +11,19 @@ package com.coffeeshop.Controller;
 import com.coffeeshop.EntityClasses.*;
 import com.coffeeshop.Enum.OrderStatusEnum;
 import com.coffeeshop.Model.BaseRestResponse;
+import com.coffeeshop.Model.NearestShops;
 import com.coffeeshop.Model.Request.CreateOrder;
 import com.coffeeshop.Repository.CustomerRepository;
 import com.coffeeshop.Repository.MenuRepository;
 import com.coffeeshop.Repository.QueueRepository;
 import com.coffeeshop.Services.CustomerService;
 import com.coffeeshop.Services.ShopService;
+import com.coffeeshop.Utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.lucene.util.SloppyMath;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +38,9 @@ import java.util.Random;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+
+    @Value("${air.distance.limit}")
+    private double airdistanceLimit;
 
     @Autowired
     CustomerService customerService;
@@ -136,7 +143,8 @@ public class CustomerController {
 
     @PostMapping(value = "/order/create")
     public @ResponseBody
-    ResponseEntity<String> orderCreate(@RequestBody CreateOrder createOrder) {
+    ResponseEntity<String> orderCreate(@RequestBody CreateOrder createOrder,
+                                       @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -144,24 +152,33 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             final Optional<CustomerEntity> customer = customerRepository.findById(createOrder.getUserid());
             final Optional<ShopEntity> shop = shopService.getShop(createOrder.getShopid());
             final Optional<MenuEntity> menu = menuRepository.findById(createOrder.getMenuid());
 
             List<QueueEntity> queueList = queueRepository.findAll();
-            for (QueueEntity queueEntity:queueList) {
-                if( queueEntity.getShop().getId()!=shop.get().getId()){
+            for (QueueEntity queueEntity : queueList) {
+                if (queueEntity.getShop().getId() != shop.get().getId()) {
                     queueList.remove(queueEntity);
                 }
             }
-            int queuenumber=0;
+            int queuenumber = 0;
             int queue = queueList.size();
             if (queue == 0 || queue < 1) {
                 queue = 1;
-            }else if(queue==1){
-                queuenumber=0;
-            }else{
-                queuenumber = getRandomNumberInRange(1, queue);
+            } else if (queue == 1) {
+                queuenumber = 0;
+            } else {
+                queuenumber = Utils.getRandomNumberInRange(1, queue);
             }
 
             QueueEntity queueEntity = queueList.get(queuenumber);
@@ -201,7 +218,8 @@ public class CustomerController {
     @PutMapping(value = "/order/update/status/{orderid}/{status}")
     public @ResponseBody
     ResponseEntity<String> updateOrderStatus(@PathVariable("orderid") long orderid,
-                                             @PathVariable("status") String status) {
+                                             @PathVariable("status") String status,
+                                             @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -209,7 +227,14 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
-
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
             OrderEntity orderEntity = customerService.updateOrderStatus(orderid, status);
             baseResponse.setError(false);
             baseResponse.setData(orderEntity);
@@ -235,7 +260,8 @@ public class CustomerController {
     @PutMapping(value = "/order/update/queue/{orderid}/{queueid}")
     public @ResponseBody
     ResponseEntity<String> updateOrderQueue(@PathVariable("orderid") long orderid,
-                                             @PathVariable("queueid") int queueid) {
+                                            @PathVariable("queueid") int queueid,
+                                            @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -243,6 +269,15 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             OrderEntity orderEntity = customerService.changeQueue(orderid, queueid);
             baseResponse.setError(false);
             baseResponse.setData(orderEntity);
@@ -268,7 +303,8 @@ public class CustomerController {
 
     @PutMapping(value = "/order/cancel/{orderid}")
     public @ResponseBody
-    ResponseEntity<String> cancelOrder(@PathVariable("orderid") long orderid) {
+    ResponseEntity<String> cancelOrder(@PathVariable("orderid") long orderid,
+                                       @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -276,6 +312,15 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             OrderEntity orderEntity = customerService.cancelOrder(orderid);
             baseResponse.setError(false);
             baseResponse.setData(orderEntity);
@@ -301,7 +346,8 @@ public class CustomerController {
 
     @GetMapping(value = "/order/{orderid}")
     public @ResponseBody
-    ResponseEntity<String> GetOrderDetails(@PathVariable("orderid") long orderid) {
+    ResponseEntity<String> GetOrderDetails(@PathVariable("orderid") long orderid,
+                                           @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -309,6 +355,15 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             OrderEntity orderEntity = customerService.getOrderDetails(orderid);
             baseResponse.setError(false);
             baseResponse.setData(orderEntity);
@@ -332,11 +387,11 @@ public class CustomerController {
     }
 
 
-
     @GetMapping(value = "/order/queue/{queueid}/{shopid}")
     public @ResponseBody
     ResponseEntity<String> getQueueOrders(@PathVariable("queueid") long queueid,
-                                          @PathVariable("shopid") long shopid) {
+                                          @PathVariable("shopid") long shopid,
+                                          @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -344,6 +399,15 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             List<OrderEntity> queueOrders = customerService.getQueueOrders(queueid, shopid);
             baseResponse.setError(false);
             baseResponse.setData(queueOrders);
@@ -369,7 +433,8 @@ public class CustomerController {
     @GetMapping(value = "/order/queue/waiting/{queueid}/{shopid}")
     public @ResponseBody
     ResponseEntity<String> waitingcount(@PathVariable("queueid") long queueid,
-                                        @PathVariable("shopid") long shopid) {
+                                        @PathVariable("shopid") long shopid,
+                                        @RequestHeader("Authorization") String Authorization) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -377,6 +442,15 @@ public class CustomerController {
         BaseRestResponse baseResponse = new BaseRestResponse();
         String responseJson = "";
         try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+
             final int i = customerService.waitingCount(queueid, shopid);
             baseResponse.setError(false);
             baseResponse.setData(i);
@@ -399,12 +473,74 @@ public class CustomerController {
         }
     }
 
-    private static int getRandomNumberInRange(int min, int max) {
-        if (min > max) {
-            throw new IllegalArgumentException("max must be greater than min");
+
+
+    @GetMapping(value = "/nearestshops/{lat1}/{long1}")
+    public @ResponseBody
+    ResponseEntity<String> nearestshops(@PathVariable("lat1") double lat1,
+                                        @PathVariable("long1") double long1) {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+        ObjectMapper mapper = new ObjectMapper();
+        BaseRestResponse baseResponse = new BaseRestResponse();
+        String responseJson = "";
+        try {
+            List<NearestShops> filtered = new ArrayList<>();
+            List<ShopEntity> allShops = customerService.getAllShops();
+            for (ShopEntity shopEntity : allShops) {
+                double distance = Utils.getAirDistance(lat1, long1, Double.parseDouble(shopEntity.getLatitude()), Double.parseDouble(shopEntity.getLongitude()));
+                if (distance <= airdistanceLimit) {
+                    NearestShops nearestShops = new NearestShops();
+                    nearestShops.setDistance(distance);
+                    nearestShops.setClosetime(shopEntity.getClosetime());
+                    nearestShops.setId(shopEntity.getId());
+                    nearestShops.setLatitude(shopEntity.getLatitude());
+                    nearestShops.setLongitude(shopEntity.getLongitude());
+                    nearestShops.setOpentime(shopEntity.getOpentime());
+                    nearestShops.setPhoneNumber(shopEntity.getPhoneNumber());
+                    nearestShops.setShopAddress(shopEntity.getShopAddress());
+                    nearestShops.setShopName(shopEntity.getShopName());
+                    filtered.add(nearestShops);
+                }
+
+            }
+
+            baseResponse.setError(false);
+            baseResponse.setData(filtered);
+            baseResponse.setMessage("Nearest Shop Details");
+            baseResponse.setCode(201);
+            responseJson = mapper.writeValueAsString(baseResponse);
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
+
+
+        } catch (Exception ex) {
+            baseResponse.setError(true);
+            baseResponse.setData(null);
+            baseResponse.setMessage(ex.getMessage().toString());
+            baseResponse.setCode(500);
+            try {
+                responseJson = mapper.writeValueAsString(baseResponse);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+    }
+
+    public boolean validateToken(String token) {
+        String[] arr = token.split(" ");
+        if (arr[1] != null) {
+            final CustomerEntity byToken = customerRepository.findByToken(arr[1]);
+            if (byToken != null) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
     }
 
 

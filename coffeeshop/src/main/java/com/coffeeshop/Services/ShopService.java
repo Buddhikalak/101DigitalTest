@@ -1,9 +1,6 @@
 package com.coffeeshop.Services;
 
-import com.coffeeshop.EntityClasses.MenuEntity;
-import com.coffeeshop.EntityClasses.QueueEntity;
-import com.coffeeshop.EntityClasses.ShopEntity;
-import com.coffeeshop.EntityClasses.UserEntity;
+import com.coffeeshop.EntityClasses.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +27,8 @@ public interface ShopService {
     public QueueEntity DeleteQueue(QueueEntity queueEntity);
 
     public UserEntity CreateUser(UserEntity userEntity);
+
+    public List<OrderEntity> getShopOrders(long shopid);
 
 
 }

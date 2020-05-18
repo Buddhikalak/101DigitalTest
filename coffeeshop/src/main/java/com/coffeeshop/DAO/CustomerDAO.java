@@ -10,6 +10,7 @@ package com.coffeeshop.DAO;
 
 import com.coffeeshop.EntityClasses.CustomerEntity;
 import com.coffeeshop.EntityClasses.OrderEntity;
+import com.coffeeshop.EntityClasses.ShopEntity;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface CustomerDAO {
     public List<OrderEntity> getQueueOrders(long queueid, long shopid);
 
     public int waitingCount(long queueid, long shopid);
+
+    public List<ShopEntity> getAllShops();
 }

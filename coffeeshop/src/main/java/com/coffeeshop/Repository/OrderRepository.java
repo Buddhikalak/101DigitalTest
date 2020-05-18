@@ -19,7 +19,4 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
-   // public List<OrderEntity> findByShopAndQueue(ShopEntity shopEntity, QueueEntity QueueEntity);
-    //public List<OrderEntity> findByShopAndQueueAndOrderStatusEnum(ShopEntity shopEntity, QueueEntity queue,String Status);
-
 }
