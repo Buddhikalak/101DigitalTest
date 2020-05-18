@@ -177,4 +177,9 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         return 0;
     }
+
+    @Override
+    public List<ShopEntity> getAllShops() {
+        return shopRepository.findAll();
+    }
 }

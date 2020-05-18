@@ -1,9 +1,6 @@
 package com.coffeeshop.Controller;
 
-import com.coffeeshop.EntityClasses.MenuEntity;
-import com.coffeeshop.EntityClasses.QueueEntity;
-import com.coffeeshop.EntityClasses.ShopEntity;
-import com.coffeeshop.EntityClasses.UserEntity;
+import com.coffeeshop.EntityClasses.*;
 import com.coffeeshop.Enum.UserRoleEnum;
 import com.coffeeshop.Model.BaseRestResponse;
 import com.coffeeshop.Model.Request.CreateQueue;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -251,10 +249,11 @@ public class ShopController {
             return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
         }
     }
+
     @GetMapping(value = "/get/{id}/menu")
     public @ResponseBody
     ResponseEntity<String> getMenusbyShopid(@PathVariable("id") long id,
-                                      @RequestHeader("Authorization") String Authorization) {
+                                            @RequestHeader("Authorization") String Authorization) {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
         ObjectMapper mapper = new ObjectMapper();
@@ -566,6 +565,54 @@ public class ShopController {
                 e.printStackTrace();
             }
             return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/get/{id}/orders/{status}")
+    public @ResponseBody
+    ResponseEntity<String> getshoporders(@PathVariable("id") long id,
+                                         @PathVariable("status") String status,
+                                         @RequestHeader("Authorization") String Authorization) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+        ObjectMapper mapper = new ObjectMapper();
+        BaseRestResponse baseResponse = new BaseRestResponse();
+        String responseJson = "";
+        try {
+            boolean Auth = validateToken(Authorization);
+            if (!Auth) {
+                baseResponse.setError(true);
+                baseResponse.setData(null);
+                baseResponse.setMessage("Authentication Fail");
+                responseJson = mapper.writeValueAsString(baseResponse);
+                return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.UNAUTHORIZED);
+            }
+            List<OrderEntity> filtered = new ArrayList<>();
+            List<OrderEntity> shopOrders = shopService.getShopOrders(id);
+            for (OrderEntity orderEntity : shopOrders) {
+                if (orderEntity.getOrderStatusEnum().equals(status.toUpperCase())){
+                    filtered.add(orderEntity);
+                }
+            }
+            baseResponse.setError(false);
+            baseResponse.setData(filtered);
+            baseResponse.setMessage("Shop orders");
+            baseResponse.setCode(201);
+            responseJson = mapper.writeValueAsString(baseResponse);
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            baseResponse.setError(false);
+            baseResponse.setData(null);
+            baseResponse.setMessage("No Shops");
+            baseResponse.setCode(201);
+            try {
+                responseJson = mapper.writeValueAsString(baseResponse);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return new ResponseEntity<String>(responseJson, responseHeaders, HttpStatus.OK);
         }
     }
 

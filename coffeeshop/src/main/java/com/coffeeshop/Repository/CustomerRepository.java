@@ -9,6 +9,7 @@
 package com.coffeeshop.Repository;
 
 import com.coffeeshop.EntityClasses.CustomerEntity;
+import com.coffeeshop.EntityClasses.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<CustomerEntity,Long> {
 
     public CustomerEntity findByUsername(String username);
+    public CustomerEntity findByToken(String token);
 
 }

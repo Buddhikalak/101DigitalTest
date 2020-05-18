@@ -32,4 +32,6 @@ public interface CustomerService {
     public List<OrderEntity> getQueueOrders(long queueid, long shopid);
 
     public int waitingCount(long queueid, long shopid);
+
+    public List<ShopEntity> getAllShops();
 }

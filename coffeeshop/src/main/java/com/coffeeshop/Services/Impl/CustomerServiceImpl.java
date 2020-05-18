@@ -11,6 +11,7 @@ package com.coffeeshop.Services.Impl;
 import com.coffeeshop.DAO.CustomerDAO;
 import com.coffeeshop.EntityClasses.CustomerEntity;
 import com.coffeeshop.EntityClasses.OrderEntity;
+import com.coffeeshop.EntityClasses.ShopEntity;
 import com.coffeeshop.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public int waitingCount(long queueid, long shopid) {
         return customerDAO.waitingCount(queueid, shopid);
+    }
+
+    @Override
+    public List<ShopEntity> getAllShops() {
+        return customerDAO.getAllShops();
     }
 }
