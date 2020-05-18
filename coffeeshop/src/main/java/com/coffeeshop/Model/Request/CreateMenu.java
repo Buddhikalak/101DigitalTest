@@ -13,4 +13,6 @@ public class CreateMenu {
     private long shopid;
     @ApiModelProperty(notes = "Menu Name")
     private String name;
+    @ApiModelProperty(notes = "Price")
+    private double price;
 }

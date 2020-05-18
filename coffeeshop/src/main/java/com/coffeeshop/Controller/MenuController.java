@@ -52,6 +52,7 @@ public class MenuController {
                 MenuEntity menuEntity = new MenuEntity();
                 menuEntity.setShop(shop.get());
                 menuEntity.setName(createMenu.getName());
+                menuEntity.setPrice(createMenu.getPrice());
                 final MenuEntity entity = shopService.createMenu(menuEntity);
                 baseResponse.setError(false);
                 baseResponse.setData(entity);
